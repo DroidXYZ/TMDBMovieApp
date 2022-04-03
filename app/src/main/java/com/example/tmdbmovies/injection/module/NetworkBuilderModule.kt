@@ -1,12 +1,11 @@
 package com.example.tmdbmovies.injection.module
 
+import android.content.Context
 import androidx.annotation.NonNull
 import com.example.tmdbmovies.network.TMDBNetworkService
-import com.example.tmdbmovies.ui.movies.MovieListFragment
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
-import dagger.android.ContributesAndroidInjector
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -16,10 +15,19 @@ import javax.inject.Singleton
 
 @Module
 class NetworkBuilderModule {
+
+    @Singleton
+    @Named("OkHttpClient")
     @Provides
+    fun provideHttpClient(context: Context): OkHttpClient {
+        return  OkHttpClient.Builder()
+            .build()
+    }
+
     @Singleton
     @Named("Retrofit")
-    fun provideRetrofit(@NonNull @Named("OkHttpClient") okHttpClient: OkHttpClient): Retrofit {
+    @Provides
+    fun provideRetrofit(@NonNull @Named("OkHttpClient")okHttpClient: OkHttpClient): Retrofit {
 
         val gson =  GsonBuilder()
             .setLenient()
@@ -32,8 +40,8 @@ class NetworkBuilderModule {
             .build()
     }
 
-    @Provides
     @Singleton
+    @Provides
     fun provideService(@NonNull @Named("Retrofit") retrofit: Retrofit): TMDBNetworkService {
         return retrofit.create(TMDBNetworkService::class.java)
     }

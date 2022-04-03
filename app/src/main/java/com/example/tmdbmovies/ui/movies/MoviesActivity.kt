@@ -1,18 +1,22 @@
 package com.example.tmdbmovies.ui.movies
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.navigation.Navigation
 import com.example.tmdbmovies.R
+import dagger.android.support.DaggerAppCompatActivity
 
-class MoviesActivity : AppCompatActivity() {
+class MoviesActivity : DaggerAppCompatActivity() {
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.main_activity)
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, MovieListFragment.newInstance())
-                .commitNow()
-        }
+        setContentView(R.layout.movie_activity_layout)
+
+        val navController = Navigation.findNavController(this, R.id.movie_main_nav_host_fragment)
+        val navInflater = navController.navInflater
+        val graph = navInflater.inflate(R.navigation.movie_navigation_graph)
+        navController.graph = graph
+
     }
 }

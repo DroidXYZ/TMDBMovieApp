@@ -6,6 +6,7 @@ import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class ActivityBuilderModule {
+
     @ContributesAndroidInjector
     internal abstract fun contributeMoviesActivity():MoviesActivity
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/movie_navigation_graph"
+    app:startDestination="@id/MovieListFragment">
+
+    <fragment
+        android:id="@+id/MovieListFragment"
+        android:name="com.example.tmdbmovies.ui.movies.MovieListFragment"
+        android:label="navigation_AM_fragment"
+        tools:layout="@layout/movie_fragment_layout" >
+
+    </fragment>
+
+</navigation>

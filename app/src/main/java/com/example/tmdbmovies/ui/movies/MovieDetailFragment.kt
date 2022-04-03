@@ -13,14 +13,14 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdbmovies.R
 import com.example.tmdbmovies.extensions.showToast
+import com.example.tmdbmovies.models.moviedetail.MovieDetailResponse
 import com.example.tmdbmovies.models.movielist.Result
 import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
-class MovieDetailFragment : DaggerFragment() {
+class MovieDetailFragment : DaggerFragment(),MovieListAdapter.OnMovieItemClick {
 
     private lateinit var movieListActivity: MoviesActivity
-    private lateinit var movieListAdapter: MovieListAdapter
     private lateinit var tvMovieTitle: TextView
     private lateinit var tvMovieDetail: TextView
     private lateinit var tvMoviePopularity: TextView
@@ -50,6 +50,14 @@ class MovieDetailFragment : DaggerFragment() {
         return view
     }
 
+    private fun updateUI(movieDetailResponse: MovieDetailResponse){
+        tvMovieTitle.text= movieDetailResponse.original_title
+        tvMovieDetail.text=  movieDetailResponse.overview
+        tvMoviePopularity.text= movieDetailResponse.popularity.toString()
+        tvMovieReleaseDate.text =  movieDetailResponse.release_date
+//        ivMovieDetailPoster=  view.findViewById<ImageView>(R.id.ivMovieDetailPoster)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getMoviesDetail(53345,"cb59747c962dcea1ec650918bf749348","en-US")
@@ -57,11 +65,15 @@ class MovieDetailFragment : DaggerFragment() {
     }
     private fun subscribeToViewModel(){
         viewModel.movieDetail.observe(viewLifecycleOwner) {
-           context?.showToast("Movie title${it.original_title}")
+            updateUI(it)
         }
         viewModel.errorMessage.observe(viewLifecycleOwner){
             context?.showToast("Error Message $it")
         }
+    }
+
+    override fun onMovieItemClick(movieId: Int) {
+
     }
 
 }

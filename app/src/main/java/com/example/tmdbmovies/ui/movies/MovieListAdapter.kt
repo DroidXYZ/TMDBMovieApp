@@ -14,9 +14,14 @@ import com.example.tmdbmovies.models.movielist.Result
 class MovieListAdapter (val context: Context?): RecyclerView.Adapter<MovieListAdapter.BaseViewHolder<*>>(){
 
     private var movieList: ArrayList<Result> = arrayListOf()
+    private lateinit var onMovieItemClick:OnMovieItemClick
     fun setMovieList(movieList: ArrayList<Result> ){
         this.movieList = movieList
         notifyDataSetChanged()
+    }
+
+    fun setMovieItemClick(onmovieItemClick:OnMovieItemClick){
+        this.onMovieItemClick= onmovieItemClick
     }
     abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
         abstract fun bind(item: Result)
@@ -38,8 +43,7 @@ class MovieListAdapter (val context: Context?): RecyclerView.Adapter<MovieListAd
         BaseViewHolder<Result>(binding.root) {
         override fun bind(item: Result) {
             binding.clMainLayout.setOnClickListener {
-
-
+                onMovieItemClick.onMovieItemClick(item.id)
             }
 //            binding.ivMoviePoster.setImageDrawable(item.appIcon)
 
@@ -48,5 +52,9 @@ class MovieListAdapter (val context: Context?): RecyclerView.Adapter<MovieListAd
 
     override fun getItemCount(): Int {
         return  movieList.size
+    }
+
+    interface OnMovieItemClick{
+        fun onMovieItemClick(movieId:Int)
     }
 }

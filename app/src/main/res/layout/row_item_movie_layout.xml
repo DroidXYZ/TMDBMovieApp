@@ -5,15 +5,13 @@
 
    <androidx.constraintlayout.widget.ConstraintLayout
        android:id="@+id/clMainLayout"
-       android:layout_width="wrap_content"
+       android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:padding="10dp">
 
        <ImageView
            android:id="@+id/ivMoviePoster"
-           android:layout_width="match_parent"
-           android:layout_height="150dp"
-           android:src="@drawable/no_image_available"
+           style="@style/TMDB_POSTER_LIST_STYLE"
            app:layout_constraintBottom_toBottomOf="parent"
            app:layout_constraintStart_toStartOf="parent"
            app:layout_constraintTop_toTopOf="parent" />

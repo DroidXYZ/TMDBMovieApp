@@ -6,6 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.Priority
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.request.RequestOptions
 import com.example.tmdbmovies.R
 import com.example.tmdbmovies.databinding.RowItemMovieLayoutBinding
 import com.example.tmdbmovies.models.movielist.Result
@@ -15,8 +19,10 @@ class MovieListAdapter (val context: Context?): RecyclerView.Adapter<MovieListAd
 
     private var movieList: ArrayList<Result> = arrayListOf()
     private lateinit var onMovieItemClick:OnMovieItemClick
-    fun setMovieList(movieList: ArrayList<Result> ){
+    private var imagePath :String =""
+    fun setMovieList(movieList: ArrayList<Result>,imagePath:String ){
         this.movieList = movieList
+        this.imagePath = imagePath
         notifyDataSetChanged()
     }
 
@@ -35,17 +41,28 @@ class MovieListAdapter (val context: Context?): RecyclerView.Adapter<MovieListAd
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
-        val installedAppInfo = movieList[position]
-        holder.bind(installedAppInfo)
+        val movieList = movieList[position]
+        holder.bind(movieList)
 
     }
     inner class ViewHolderInstalledApp(var binding: RowItemMovieLayoutBinding) :
         BaseViewHolder<Result>(binding.root) {
         override fun bind(item: Result) {
             binding.clMainLayout.setOnClickListener {
-                onMovieItemClick.onMovieItemClick(item.id)
+                onMovieItemClick.onMovieItemClick(item.id,item.poster_path)
             }
-//            binding.ivMoviePoster.setImageDrawable(item.appIcon)
+            val options = RequestOptions()
+                .fitCenter()
+                .error(R.drawable.no_image_available)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .priority(Priority.HIGH)
+                .placeholder(R.drawable.no_image_available)
+            context?.let {
+                Glide.with(it)
+                    .load("$imagePath${item.poster_path}")
+                    .apply(options)
+                    .into(binding.ivMoviePoster)
+            }
 
         }
     }
@@ -55,6 +72,6 @@ class MovieListAdapter (val context: Context?): RecyclerView.Adapter<MovieListAd
     }
 
     interface OnMovieItemClick{
-        fun onMovieItemClick(movieId:Int)
+        fun onMovieItemClick(movieId:Int,posterPath:String?)
     }
 }

@@ -1,5 +1,6 @@
 package com.example.tmdbmovies.network
 
+import com.example.tmdbmovies.models.configuration.ConfigurationResponse
 import com.example.tmdbmovies.models.moviedetail.MovieDetailResponse
 import com.example.tmdbmovies.models.movielist.MovieResponse
 import retrofit2.Response
@@ -22,4 +23,9 @@ interface TMDBNetworkService {
          @Query("api_key") apikey:String,
          @Query("language") language:String
      ):Response<MovieDetailResponse>
+
+    @GET("3/configuration")
+    suspend fun getImageConfiguration(
+        @Query("api_key") apikey:String
+    ):Response<ConfigurationResponse>
 }

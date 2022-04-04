@@ -3,9 +3,10 @@ package com.example.tmdbmovies.ui.movies
 import android.os.Bundle
 import androidx.navigation.Navigation
 import com.example.tmdbmovies.R
+import com.example.tmdbmovies.base.BaseActivity
 import dagger.android.support.DaggerAppCompatActivity
 
-class MoviesActivity : DaggerAppCompatActivity() {
+class MoviesActivity : BaseActivity() {
 
 
 

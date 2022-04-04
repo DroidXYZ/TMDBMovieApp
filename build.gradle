@@ -3,6 +3,8 @@ buildscript {
     ext.dagger_version = 2.41
     ext.retrofit_version = '2.9.0'
     ext.navigation_version = '2.4.1'
+    ext.glide_version = '4.13.0'
+    ext.lifecycle_version = '2.4.1'
 }
 plugins {
     id 'com.android.application' version '7.1.2' apply false

@@ -7,12 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdbmovies.R
 import com.example.tmdbmovies.TMDBMovieApplication
 import com.example.tmdbmovies.base.BaseFragment
+import com.example.tmdbmovies.databinding.MovieDetailFragmentLayoutBinding
+import com.example.tmdbmovies.databinding.MovieFragmentLayoutBinding
 import com.example.tmdbmovies.extensions.showToast
 import com.example.tmdbmovies.models.movielist.Result
 import com.example.tmdbmovies.tmdbutils.TMDBConstants
@@ -23,8 +26,8 @@ import javax.inject.Inject
 class MovieListFragment : BaseFragment(),MovieListAdapter.OnMovieItemClick {
 
     private lateinit var movieListActivity: MoviesActivity
-    private lateinit var rvMovieList: RecyclerView
-    private lateinit var progressBar: ProgressBar
+    private lateinit var bindingComponent: MovieFragmentLayoutBinding
+
     private lateinit var movieListAdapter: MovieListAdapter
     private var imagePath:String =""
 
@@ -48,24 +51,25 @@ class MovieListFragment : BaseFragment(),MovieListAdapter.OnMovieItemClick {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val view = inflater.inflate(R.layout.movie_fragment_layout, container, false)
-        rvMovieList = view.findViewById(R.id.rvMovieList)
-        progressBar = view.findViewById(R.id.progressBar)
-        return view
+        bindingComponent = DataBindingUtil.inflate(
+            LayoutInflater.from(context),
+            R.layout.movie_fragment_layout, container, false)
+
+        return bindingComponent.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        rvMovieList.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context) as androidx.recyclerview.widget.RecyclerView.LayoutManager?
+        bindingComponent.rvMovieList.layoutManager = androidx.recyclerview.widget.LinearLayoutManager(context) as androidx.recyclerview.widget.RecyclerView.LayoutManager?
         val dividerItemDecoration = DividerItemDecoration(
-            rvMovieList.context,
+            bindingComponent.rvMovieList.context,
             1
         )
-        rvMovieList.addItemDecoration(dividerItemDecoration)
+        bindingComponent.rvMovieList.addItemDecoration(dividerItemDecoration)
         movieListAdapter= MovieListAdapter(context)
         movieListAdapter.setMovieItemClick(this)
-        rvMovieList.adapter = movieListAdapter
+        bindingComponent.rvMovieList.adapter = movieListAdapter
         viewModel.getMoviesList(TMDBConstants.API_KEY,TMDBConstants.APP_LANGUAGE,1)
 
     }
@@ -91,9 +95,9 @@ class MovieListFragment : BaseFragment(),MovieListAdapter.OnMovieItemClick {
     }
     private fun showLoadingIndicator(isVisible: Boolean){
         if (!isVisible)
-            progressBar.visibility = View.GONE
+            bindingComponent.progressBar.visibility = View.GONE
         else
-            progressBar.visibility = View.VISIBLE
+            bindingComponent.progressBar.visibility = View.VISIBLE
     }
 
     override fun onMovieItemClick(movieId: Int,posterPath:String?) {

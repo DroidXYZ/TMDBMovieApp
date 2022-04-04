@@ -9,12 +9,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.tmdbmovies.R
 import com.example.tmdbmovies.base.BaseFragment
+import com.example.tmdbmovies.databinding.MovieDetailFragmentLayoutBinding
+import com.example.tmdbmovies.databinding.RowItemMovieLayoutBinding
 import com.example.tmdbmovies.extensions.showToast
 import com.example.tmdbmovies.models.moviedetail.MovieDetailResponse
 import com.example.tmdbmovies.tmdbutils.TMDBConstants
@@ -23,13 +26,8 @@ import javax.inject.Inject
 class MovieDetailFragment : BaseFragment() {
 
     private lateinit var movieListActivity: MoviesActivity
-    private lateinit var tvMovieTitle: TextView
-    private lateinit var tvMovieDetail: TextView
-    private lateinit var tvMoviePopularity: TextView
-    private lateinit var tvMovieReleaseDate: TextView
-    private lateinit var ivMovieDetailPoster: ImageView
-    private lateinit var progressBar: ProgressBar
     private var imagePath:String=""
+    private lateinit var bindingComponent: MovieDetailFragmentLayoutBinding
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -45,14 +43,11 @@ class MovieDetailFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-         val view = inflater.inflate(R.layout.movie_detail_fragment_layout, container, false)
-        tvMovieTitle= view.findViewById(R.id.tvMovieTitle)
-        tvMovieDetail=  view.findViewById(R.id.tvMovieDetail)
-        tvMoviePopularity= view.findViewById(R.id.tvMoviePopularity)
-        tvMovieReleaseDate=  view.findViewById(R.id.tvMovieReleaseDate)
-        ivMovieDetailPoster=  view.findViewById(R.id.ivMovieDetailPoster)
-        progressBar=  view.findViewById(R.id.progressBar)
-        return view
+         bindingComponent = DataBindingUtil.inflate(
+            LayoutInflater.from(context),
+            R.layout.movie_detail_fragment_layout, container, false)
+
+        return bindingComponent.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,10 +69,10 @@ class MovieDetailFragment : BaseFragment() {
         }
     }
     private fun updateUI(movieDetailResponse: MovieDetailResponse){
-        tvMovieTitle.text= movieDetailResponse.original_title
-        tvMovieDetail.text=  movieDetailResponse.overview
-        tvMoviePopularity.text= "${getString(R.string.movie_popularity)} : ${movieDetailResponse.popularity}"
-        tvMovieReleaseDate.text =  "${getString(R.string.movie_release_date)} : ${movieDetailResponse.release_date}"
+        bindingComponent.tvMovieTitle.text= movieDetailResponse.original_title
+        bindingComponent.tvMovieDetail.text=  movieDetailResponse.overview
+        bindingComponent.tvMoviePopularity.text= "${getString(R.string.movie_popularity)} : ${movieDetailResponse.popularity}"
+        bindingComponent.tvMovieReleaseDate.text =  "${getString(R.string.movie_release_date)} : ${movieDetailResponse.release_date}"
         val options = RequestOptions()
             .fitCenter()
             .error(R.drawable.no_image_available)
@@ -88,15 +83,15 @@ class MovieDetailFragment : BaseFragment() {
             Glide.with(it)
                 .load(imagePath)
                 .apply(options)
-                .into(ivMovieDetailPoster)
+                .into(bindingComponent.ivMovieDetailPoster)
         }
     }
 
     private fun showLoadingIndicator(isVisible: Boolean){
         if (!isVisible)
-            progressBar.visibility = View.GONE
+            bindingComponent.progressBar.visibility = View.GONE
         else
-            progressBar.visibility = View.VISIBLE
+            bindingComponent.progressBar.visibility = View.VISIBLE
     }
 
 

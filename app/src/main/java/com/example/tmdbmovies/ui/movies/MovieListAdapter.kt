@@ -19,10 +19,8 @@ class MovieListAdapter (val context: Context?): RecyclerView.Adapter<MovieListAd
 
     private var movieList: ArrayList<Result> = arrayListOf()
     private lateinit var onMovieItemClick:OnMovieItemClick
-    private var imagePath :String =""
-    fun setMovieList(movieList: ArrayList<Result>,imagePath:String ){
+    fun setMovieList(movieList: ArrayList<Result>){
         this.movieList = movieList
-        this.imagePath = imagePath
         notifyDataSetChanged()
     }
 
@@ -53,13 +51,13 @@ class MovieListAdapter (val context: Context?): RecyclerView.Adapter<MovieListAd
             }
             val options = RequestOptions()
                 .fitCenter()
-                .error(R.drawable.no_image_available)
+                .error(R.drawable.no_image_available_big)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .priority(Priority.HIGH)
-                .placeholder(R.drawable.no_image_available)
+                .placeholder(R.drawable.image_loading)
             context?.let {
                 Glide.with(it)
-                    .load("$imagePath${item.poster_path}")
+                    .load("${item.poster_path}")
                     .apply(options)
                     .into(binding.ivMoviePoster)
             }

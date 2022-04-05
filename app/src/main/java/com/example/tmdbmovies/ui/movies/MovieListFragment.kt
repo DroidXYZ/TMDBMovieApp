@@ -29,13 +29,13 @@ class MovieListFragment : BaseFragment(),MovieListAdapter.OnMovieItemClick {
     private lateinit var bindingComponent: MovieFragmentLayoutBinding
 
     private lateinit var movieListAdapter: MovieListAdapter
-    private var imagePath:String =""
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     val viewModel by lazy{
         ViewModelProvider(this,  viewModelFactory)[MoviesViewModel::class.java]
     }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         movieListActivity = activity as MoviesActivity
@@ -43,8 +43,8 @@ class MovieListFragment : BaseFragment(),MovieListAdapter.OnMovieItemClick {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getImageConfiguration(TMDBConstants.API_KEY)
         subscribeToViewModel()
+
     }
 
     override fun onCreateView(
@@ -52,8 +52,8 @@ class MovieListFragment : BaseFragment(),MovieListAdapter.OnMovieItemClick {
         savedInstanceState: Bundle?
     ): View {
         bindingComponent = DataBindingUtil.inflate(
-            LayoutInflater.from(context),
-            R.layout.movie_fragment_layout, container, false)
+                LayoutInflater.from(context),
+                R.layout.movie_fragment_layout, container, false)
 
         return bindingComponent.root
     }
@@ -70,21 +70,13 @@ class MovieListFragment : BaseFragment(),MovieListAdapter.OnMovieItemClick {
         movieListAdapter= MovieListAdapter(context)
         movieListAdapter.setMovieItemClick(this)
         bindingComponent.rvMovieList.adapter = movieListAdapter
-        viewModel.getMoviesList(TMDBConstants.API_KEY,TMDBConstants.APP_LANGUAGE,1)
 
+        viewModel.getMoviesAndConfiguration(TMDBConstants.API_KEY,TMDBConstants.APP_LANGUAGE,1)
     }
     private fun subscribeToViewModel(){
-        viewModel.imageConfiguration.observe(movieListActivity) {
-            var imageWidth = "original"
-            val posterArraySize = it.images.poster_sizes.size
-           if (posterArraySize>3){
-                imageWidth= it.images.poster_sizes[posterArraySize-3]
-           }
-            imagePath=  "${it.images.secure_base_url}${imageWidth}"
-        }
         viewModel.movieList.observe(movieListActivity) {
             context?.showToast("Movie List Size${it.results.size}")
-            movieListAdapter.setMovieList(it.results as ArrayList<Result>,imagePath)
+            movieListAdapter.setMovieList(it.results as ArrayList<Result>)
         }
         viewModel.errorMessage.observe(movieListActivity){
             context?.showToast("Error Message $it")
@@ -104,7 +96,7 @@ class MovieListFragment : BaseFragment(),MovieListAdapter.OnMovieItemClick {
         val bundle = Bundle()
         bundle.putInt(TMDBConstants.EXTRA_MOVIE_ID, movieId)
         posterPath?.let {
-            bundle.putString(TMDBConstants.EXTRA_MOVIE_IMAGE_PATH, "$imagePath$it")
+            bundle.putString(TMDBConstants.EXTRA_MOVIE_IMAGE_PATH, "$it")
         }
         val navController = Navigation.findNavController(movieListActivity, R.id.movie_main_nav_host_fragment)
         if (navController.currentDestination?.id == R.id.MovieListFragment) {

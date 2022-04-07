@@ -14,5 +14,4 @@ abstract class ViewModelModule {
     @ViewModelKey(MoviesViewModel::class)
     internal abstract fun bindMoviesViewModel(moviesViewModel: MoviesViewModel): ViewModel
 
-
 }

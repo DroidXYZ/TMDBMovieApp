@@ -11,17 +11,10 @@ import kotlinx.coroutines.*
 import retrofit2.Response
 import javax.inject.Inject
 
-class MoviesViewModel @Inject constructor(private val repository: MovieRepository,private val state: SavedStateHandle) : ViewModel() {
+class MoviesViewModel @Inject constructor(private val repository: MovieRepository) : ViewModel() {
 
-    companion object {
-        private const val LIST_STATE = "list"
-    }
 
-    var listState: Parcelable?
-        get() = state.get(LIST_STATE)
-        set(value) {
-            state.set(LIST_STATE, value)
-        }
+
      val errorMessage = MutableLiveData<String>()
      val movieList = MutableLiveData<MovieResponse>()
      val movieDetail = MutableLiveData<MovieDetailResponse>()
@@ -32,10 +25,10 @@ class MoviesViewModel @Inject constructor(private val repository: MovieRepositor
      val loading = MutableLiveData<Boolean>()
 
 
-    fun getMoviesDetail(path:Int, apiKey:String,language : String) {
+    fun getMoviesDetail(movieID:Int, apiKey:String,language : String) {
         loading.value = true
         job = CoroutineScope(Dispatchers.IO + exceptionHandler).launch {
-            val response = repository.getMovieDetail(path,apiKey,language)
+            val response = repository.getMovieDetail(movieID,apiKey,language)
             withContext(Dispatchers.Main) {
                 if (response.isSuccessful) {
                     movieDetail.postValue(response.body())

@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
+import com.example.tmdbmovies.BuildConfig.API_KEY
 import com.example.tmdbmovies.R
 import com.example.tmdbmovies.TMDBMovieApplication
 import com.example.tmdbmovies.base.BaseFragment
@@ -29,6 +30,7 @@ class MovieListFragment : BaseFragment(),MovieListAdapter.OnMovieItemClick {
     private lateinit var bindingComponent: MovieFragmentLayoutBinding
 
     private lateinit var movieListAdapter: MovieListAdapter
+    private var lastSelectedPos= -1
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -71,12 +73,12 @@ class MovieListFragment : BaseFragment(),MovieListAdapter.OnMovieItemClick {
         movieListAdapter.setMovieItemClick(this)
         bindingComponent.rvMovieList.adapter = movieListAdapter
 
-        viewModel.getMoviesAndConfiguration(TMDBConstants.API_KEY,TMDBConstants.APP_LANGUAGE,1)
+        viewModel.getMoviesAndConfiguration(API_KEY,TMDBConstants.APP_LANGUAGE,1)
     }
     private fun subscribeToViewModel(){
         viewModel.movieList.observe(movieListActivity) {
-            context?.showToast("Movie List Size${it.results.size}")
             movieListAdapter.setMovieList(it.results as ArrayList<Result>)
+            bindingComponent.rvMovieList.scrollToPosition(lastSelectedPos)
         }
         viewModel.errorMessage.observe(movieListActivity){
             context?.showToast("Error Message $it")
@@ -92,9 +94,10 @@ class MovieListFragment : BaseFragment(),MovieListAdapter.OnMovieItemClick {
             bindingComponent.progressBar.visibility = View.VISIBLE
     }
 
-    override fun onMovieItemClick(movieId: Int,posterPath:String?) {
+    override fun onMovieItemClick(movieId: Int,posterPath:String?,position:Int) {
         val bundle = Bundle()
         bundle.putInt(TMDBConstants.EXTRA_MOVIE_ID, movieId)
+        lastSelectedPos = position
         posterPath?.let {
             bundle.putString(TMDBConstants.EXTRA_MOVIE_IMAGE_PATH, "$it")
         }

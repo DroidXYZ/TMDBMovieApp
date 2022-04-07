@@ -3,6 +3,7 @@ package com.example.tmdbmovies.injection.module
 import android.content.Context
 import androidx.annotation.NonNull
 import com.example.tmdbmovies.network.TMDBNetworkService
+import com.example.tmdbmovies.tmdbutils.TMDBEndPoint
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -34,7 +35,7 @@ class NetworkBuilderModule {
             .create()
         return Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl("https://api.themoviedb.org/")
+            .baseUrl(TMDBEndPoint.BASE_URL)
             .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build()

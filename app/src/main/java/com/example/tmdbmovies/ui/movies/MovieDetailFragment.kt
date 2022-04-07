@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+import com.example.tmdbmovies.BuildConfig
 import com.example.tmdbmovies.R
 import com.example.tmdbmovies.base.BaseFragment
 import com.example.tmdbmovies.databinding.MovieDetailFragmentLayoutBinding
@@ -54,7 +55,7 @@ class MovieDetailFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         val movieID = requireArguments().getInt(TMDBConstants.EXTRA_MOVIE_ID)
         imagePath = requireArguments().getString(TMDBConstants.EXTRA_MOVIE_IMAGE_PATH)?:""
-        viewModel.getMoviesDetail(movieID,TMDBConstants.API_KEY,TMDBConstants.APP_LANGUAGE)
+        viewModel.getMoviesDetail(movieID,BuildConfig.API_KEY,TMDBConstants.APP_LANGUAGE)
         subscribeToViewModel()
     }
     private fun subscribeToViewModel(){

@@ -47,7 +47,7 @@ class MovieListAdapter (val context: Context?): RecyclerView.Adapter<MovieListAd
         BaseViewHolder<Result>(binding.root) {
         override fun bind(item: Result) {
             binding.clMainLayout.setOnClickListener {
-                onMovieItemClick.onMovieItemClick(item.id,item.poster_path)
+                onMovieItemClick.onMovieItemClick(item.id,item.poster_path,adapterPosition)
             }
             val options = RequestOptions()
                 .fitCenter()
@@ -70,6 +70,6 @@ class MovieListAdapter (val context: Context?): RecyclerView.Adapter<MovieListAd
     }
 
     interface OnMovieItemClick{
-        fun onMovieItemClick(movieId:Int,posterPath:String?)
+        fun onMovieItemClick(movieId:Int,posterPath:String?,position: Int)
     }
 }

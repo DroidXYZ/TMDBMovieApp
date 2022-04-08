@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -21,6 +22,7 @@ import com.example.tmdbmovies.databinding.MovieDetailFragmentLayoutBinding
 import com.example.tmdbmovies.databinding.RowItemMovieLayoutBinding
 import com.example.tmdbmovies.extensions.showToast
 import com.example.tmdbmovies.models.moviedetail.MovieDetailResponse
+import com.example.tmdbmovies.tmdbutils.InternetUtil
 import com.example.tmdbmovies.tmdbutils.TMDBConstants
 import javax.inject.Inject
 
@@ -28,6 +30,7 @@ class MovieDetailFragment : BaseFragment() {
 
     private lateinit var movieListActivity: MoviesActivity
     private var imagePath:String=""
+    private var  movieID:Int=0
     private lateinit var bindingComponent: MovieDetailFragmentLayoutBinding
 
     @Inject
@@ -53,10 +56,33 @@ class MovieDetailFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val movieID = requireArguments().getInt(TMDBConstants.EXTRA_MOVIE_ID)
+         movieID = requireArguments().getInt(TMDBConstants.EXTRA_MOVIE_ID)
         imagePath = requireArguments().getString(TMDBConstants.EXTRA_MOVIE_IMAGE_PATH)?:""
-        viewModel.getMoviesDetail(movieID,BuildConfig.API_KEY,TMDBConstants.APP_LANGUAGE)
+        checkNetworkConnection()
         subscribeToViewModel()
+    }
+
+    private fun checkNetworkConnection() = if (InternetUtil.isInternetOn()) {
+        viewModel.getMoviesDetail(movieID,BuildConfig.API_KEY,TMDBConstants.APP_LANGUAGE)
+    } else {
+        showEmptyState(isShowEmptyState = true,getString(R.string.please_check_your_internet_connection_and_try_again))
+        InternetUtil.observe(movieListActivity, Observer { status ->
+            if(status) {
+                showEmptyState(isShowEmptyState = false,"")
+                viewModel.getMoviesDetail(movieID,BuildConfig.API_KEY,TMDBConstants.APP_LANGUAGE)
+            }
+        })
+    }
+    private fun showEmptyState(isShowEmptyState:Boolean, errorMsg:String){
+        if(isShowEmptyState){
+            bindingComponent.tvEmptyView.visibility = View.VISIBLE
+            bindingComponent.tvEmptyView.text = errorMsg
+            bindingComponent.clMainLayout.visibility = View.GONE
+        }
+        else{
+            bindingComponent.tvEmptyView.visibility = View.GONE
+            bindingComponent.clMainLayout.visibility = View.VISIBLE
+        }
     }
     private fun subscribeToViewModel(){
         viewModel.movieDetail.observe(viewLifecycleOwner) {
@@ -64,6 +90,7 @@ class MovieDetailFragment : BaseFragment() {
         }
         viewModel.errorMessage.observe(viewLifecycleOwner){
             context?.showToast("Error Message $it")
+            showEmptyState(true,"Error Message $it")
         }
         viewModel.loading.observe(viewLifecycleOwner){
             showLoadingIndicator(it)

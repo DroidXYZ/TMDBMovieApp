@@ -4,4 +4,6 @@
     <string name="movie_release_date">Movie Release Date</string>
     <string name="movie_list">Movie List</string>
     <string name="movie_detail">Movie Detail</string>
+    <string name="no_movie_data_available_please_try_again">No Movie Data Available Please try again</string>
+    <string name="please_check_your_internet_connection_and_try_again">Please check your internet connection and try again</string>
 </resources>

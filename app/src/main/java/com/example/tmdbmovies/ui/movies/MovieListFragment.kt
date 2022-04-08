@@ -6,22 +6,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.RecyclerView
 import com.example.tmdbmovies.BuildConfig.API_KEY
 import com.example.tmdbmovies.R
-import com.example.tmdbmovies.TMDBMovieApplication
 import com.example.tmdbmovies.base.BaseFragment
-import com.example.tmdbmovies.databinding.MovieDetailFragmentLayoutBinding
 import com.example.tmdbmovies.databinding.MovieFragmentLayoutBinding
 import com.example.tmdbmovies.extensions.showToast
 import com.example.tmdbmovies.models.movielist.Result
+import com.example.tmdbmovies.tmdbutils.InternetUtil
 import com.example.tmdbmovies.tmdbutils.TMDBConstants
-import com.google.gson.Gson
-import dagger.android.support.DaggerFragment
 import javax.inject.Inject
 
 class MovieListFragment : BaseFragment(),MovieListAdapter.OnMovieItemClick {
@@ -72,8 +68,32 @@ class MovieListFragment : BaseFragment(),MovieListAdapter.OnMovieItemClick {
         movieListAdapter= MovieListAdapter(context)
         movieListAdapter.setMovieItemClick(this)
         bindingComponent.rvMovieList.adapter = movieListAdapter
+        checkNetworkConnection()
 
+    }
+
+    private fun checkNetworkConnection() = if (InternetUtil.isInternetOn()) {
         viewModel.getMoviesAndConfiguration(API_KEY,TMDBConstants.APP_LANGUAGE,1)
+    } else {
+        showEmptyState(isShowEmptyState = true,getString(R.string.please_check_your_internet_connection_and_try_again))
+        InternetUtil.observe(movieListActivity, Observer { status ->
+            if(status) {
+                showEmptyState(isShowEmptyState = false,"")
+                viewModel.getMoviesAndConfiguration(API_KEY, TMDBConstants.APP_LANGUAGE, 1)
+            }
+        })
+    }
+
+    private fun showEmptyState(isShowEmptyState:Boolean,errorMsg:String){
+        if(isShowEmptyState){
+                bindingComponent.tvEmptyView.visibility = View.VISIBLE
+                bindingComponent.tvEmptyView.text = errorMsg
+                bindingComponent.rvMovieList.visibility = View.GONE
+        }
+        else{
+            bindingComponent.tvEmptyView.visibility = View.GONE
+            bindingComponent.rvMovieList.visibility = View.VISIBLE
+        }
     }
     private fun subscribeToViewModel(){
         viewModel.movieList.observe(movieListActivity) {
@@ -82,6 +102,7 @@ class MovieListFragment : BaseFragment(),MovieListAdapter.OnMovieItemClick {
         }
         viewModel.errorMessage.observe(movieListActivity){
             context?.showToast("Error Message $it")
+            showEmptyState(isShowEmptyState = true,"Error Message- $it")
         }
         viewModel.loading.observe(movieListActivity){
             showLoadingIndicator(it)

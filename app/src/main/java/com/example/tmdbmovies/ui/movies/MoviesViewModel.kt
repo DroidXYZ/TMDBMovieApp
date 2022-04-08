@@ -1,15 +1,18 @@
 package com.example.tmdbmovies.ui.movies
 
-import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.example.tmdbmovies.models.ErrorMessage
 import com.example.tmdbmovies.models.configuration.ConfigurationResponse
 import com.example.tmdbmovies.models.moviedetail.MovieDetailResponse
 import com.example.tmdbmovies.models.movielist.MovieResponse
+import com.google.gson.Gson
 import kotlinx.coroutines.*
+import okhttp3.ResponseBody
+import org.json.JSONObject
 import retrofit2.Response
 import javax.inject.Inject
+
 
 class MoviesViewModel @Inject constructor(private val repository: MovieRepository) : ViewModel() {
 
@@ -20,7 +23,8 @@ class MoviesViewModel @Inject constructor(private val repository: MovieRepositor
      val movieDetail = MutableLiveData<MovieDetailResponse>()
      private var job: Job? = null
      private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        onError("Exception handled: ${throwable.localizedMessage}")
+         errorMessage.value = "Exception handled: ${throwable.localizedMessage}"
+         loading.value = false
      }
      val loading = MutableLiveData<Boolean>()
 
@@ -34,7 +38,7 @@ class MoviesViewModel @Inject constructor(private val repository: MovieRepositor
                     movieDetail.postValue(response.body())
                     loading.value = false
                 } else {
-                    onError("Error : ${response.message()} ")
+                    response.errorBody()?.let { onError(it) }
                 }
             }
         }
@@ -55,12 +59,12 @@ class MoviesViewModel @Inject constructor(private val repository: MovieRepositor
                 if (configurationResponse.isSuccessful) {
                     bindConfigurationWithMovieList(configurationResponse,movieListResponse)
                 } else {
-                    onError("Error : ${configurationResponse.message()} ")
+                    configurationResponse.errorBody()?.let { onError(it) }
                     if(movieListResponse.isSuccessful){
                         movieList.postValue(movieListResponse.body())
                         loading.value = false
                     }else{
-                        onError("Error : ${movieListResponse.message()} ")
+                        movieListResponse.errorBody()?.let { onError(it) }
                     }
                 }
             }
@@ -84,13 +88,14 @@ class MoviesViewModel @Inject constructor(private val repository: MovieRepositor
             movieList.postValue(movieListResponse.body())
             loading.value = false
         }else{
-            onError("Error : ${movieListResponse.message()} ")
+            movieListResponse.errorBody()?.let { onError(it) }
         }
     }
 
 
-    private fun onError(message: String) {
-        errorMessage.value = message
+    private fun onError(message: ResponseBody) {
+        val errorMessageResponse = Gson().fromJson(message.string(),ErrorMessage::class.java)
+        errorMessage.value = errorMessageResponse.status_message
         loading.value = false
     }
 

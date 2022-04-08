@@ -9,7 +9,6 @@ import com.example.tmdbmovies.models.movielist.MovieResponse
 import com.google.gson.Gson
 import kotlinx.coroutines.*
 import okhttp3.ResponseBody
-import org.json.JSONObject
 import retrofit2.Response
 import javax.inject.Inject
 
@@ -23,8 +22,8 @@ class MoviesViewModel @Inject constructor(private val repository: MovieRepositor
      val movieDetail = MutableLiveData<MovieDetailResponse>()
      private var job: Job? = null
      private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-         errorMessage.value = "Exception handled: ${throwable.localizedMessage}"
-         loading.value = false
+         errorMessage.postValue("${throwable.localizedMessage}")
+         loading.postValue(false)
      }
      val loading = MutableLiveData<Boolean>()
 

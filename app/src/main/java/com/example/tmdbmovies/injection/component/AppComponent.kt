@@ -12,17 +12,18 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [AndroidSupportInjectionModule::class,
-                ActivityBuilderModule::class,
-                FragmentBuilderModule::class,
-                ViewModelModule::class,
-                NetworkBuilderModule::class,
-                ViewModelFactoryModule::class
+        ActivityBuilderModule::class,
+        FragmentBuilderModule::class,
+        ViewModelModule::class,
+        NetworkBuilderModule::class,
+        ViewModelFactoryModule::class
     ]
 )
 interface AppComponent : AndroidInjector<TMDBMovieApplication> {
     @Component.Builder
     interface Builder {
-        @BindsInstance fun applicationContext(applicationContext: Context): Builder
+        @BindsInstance
+        fun applicationContext(applicationContext: Context): Builder
         fun build(): AppComponent
     }
 

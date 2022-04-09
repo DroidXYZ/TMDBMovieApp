@@ -2,106 +2,112 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-<ScrollView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="24dp"
-    tools:context=".ui.movies.MovieListFragment">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clMainLayout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="24dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        >
-    <TextView
-        android:id="@+id/message"
-        style="@style/TMDB_TEXT_STYLE"
-        android:text="@string/movie_detail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/tvMovieTitle"
-        style="@style/TMDB_TEXT_STYLE"
-        android:layout_marginTop="16dp"
-        tools:text="Movie Title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/message" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="24dp"
+            tools:context=".ui.movies.MovieListFragment">
 
-    <TextView
-        android:id="@+id/tvMovieDetail"
-        style="@style/TMDB_TEXT_STYLE"
-        android:layout_marginTop="16dp"
-        tools:text="Movie Detail"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ivMovieDetailPoster" />
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/clMainLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-    <ImageView
-        android:id="@+id/ivMovieDetailPoster"
-        style="@style/TMDB_POSTER_DETAIL_STYLE"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvMovieTitle"
-        tools:src="@tools:sample/avatars" />
+                <TextView
+                    android:id="@+id/message"
+                    style="@style/TMDB_TEXT_STYLE"
+                    android:text="@string/movie_detail"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tvMovieReleaseDate"
-        style="@style/TMDB_TEXT_STYLE"
-        android:layout_marginTop="16dp"
-        tools:text="@string/movie_release_date"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvMovieDetail" />
+                <TextView
+                    android:id="@+id/tvMovieTitle"
+                    style="@style/TMDB_TEXT_STYLE"
+                    android:layout_marginTop="16dp"
+                    tools:text="Movie Title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/message" />
 
-    <TextView
-        android:id="@+id/tvMoviePopularity"
-        style="@style/TMDB_TEXT_STYLE"
-        android:layout_marginTop="16dp"
-        tools:text="@string/movie_popularity"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvMovieReleaseDate" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyle"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-    <TextView
-        android:id="@+id/tvEmptyView"
-        android:visibility="gone"
-        android:gravity="center"
-        android:padding="30dp"
-        android:drawableTop="@drawable/no_movie_data"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:text="@string/please_check_your_internet_connection_and_try_again"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:id="@+id/tvMovieDetail"
+                    style="@style/TMDB_TEXT_STYLE"
+                    android:layout_marginTop="16dp"
+                    tools:text="Movie Detail"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ivMovieDetailPoster" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
-</ScrollView>
+                <ImageView
+                    android:id="@+id/ivMovieDetailPoster"
+                    style="@style/TMDB_POSTER_DETAIL_STYLE"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvMovieTitle"
+                    tools:src="@tools:sample/avatars" />
+
+                <TextView
+                    android:id="@+id/tvMovieReleaseDate"
+                    style="@style/TMDB_TEXT_STYLE"
+                    android:layout_marginTop="16dp"
+                    tools:text="@string/movie_release_date"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvMovieDetail" />
+
+                <TextView
+                    android:id="@+id/tvMoviePopularity"
+                    style="@style/TMDB_TEXT_STYLE"
+                    android:layout_marginTop="16dp"
+                    tools:text="@string/movie_popularity"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvMovieReleaseDate" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyle"
+                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tvEmptyView"
+                android:visibility="gone"
+                android:gravity="center"
+                android:padding="30dp"
+                android:drawableTop="@drawable/no_movie_data"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18sp"
+                android:text="@string/please_check_your_internet_connection_and_try_again"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
     <data>
+
         <import type="android.view.View" />
     </data>
 

@@ -21,16 +21,16 @@ class NetworkBuilderModule {
     @Named("OkHttpClient")
     @Provides
     fun provideHttpClient(context: Context): OkHttpClient {
-        return  OkHttpClient.Builder()
+        return OkHttpClient.Builder()
             .build()
     }
 
     @Singleton
     @Named("Retrofit")
     @Provides
-    fun provideRetrofit(@NonNull @Named("OkHttpClient")okHttpClient: OkHttpClient): Retrofit {
+    fun provideRetrofit(@NonNull @Named("OkHttpClient") okHttpClient: OkHttpClient): Retrofit {
 
-        val gson =  GsonBuilder()
+        val gson = GsonBuilder()
             .setLenient()
             .create()
         return Retrofit.Builder()

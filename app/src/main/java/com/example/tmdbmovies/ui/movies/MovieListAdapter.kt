@@ -15,18 +15,20 @@ import com.example.tmdbmovies.databinding.RowItemMovieLayoutBinding
 import com.example.tmdbmovies.models.movielist.Result
 
 
-class MovieListAdapter (val context: Context?): RecyclerView.Adapter<MovieListAdapter.BaseViewHolder<*>>(){
+class MovieListAdapter(val context: Context?) :
+    RecyclerView.Adapter<MovieListAdapter.BaseViewHolder<*>>() {
 
     private var movieList: ArrayList<Result> = arrayListOf()
-    private lateinit var onMovieItemClick:OnMovieItemClick
-    fun setMovieList(movieList: ArrayList<Result>){
+    private lateinit var onMovieItemClick: OnMovieItemClick
+    fun setMovieList(movieList: ArrayList<Result>) {
         this.movieList = movieList
         notifyDataSetChanged()
     }
 
-    fun setMovieItemClick(onmovieItemClick:OnMovieItemClick){
-        this.onMovieItemClick= onmovieItemClick
+    fun setMovieItemClick(onmovieItemClick: OnMovieItemClick) {
+        this.onMovieItemClick = onmovieItemClick
     }
+
     abstract class BaseViewHolder<T>(itemView: View) : RecyclerView.ViewHolder(itemView) {
         abstract fun bind(item: Result)
     }
@@ -34,8 +36,9 @@ class MovieListAdapter (val context: Context?): RecyclerView.Adapter<MovieListAd
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
         val bindingComponent: RowItemMovieLayoutBinding = DataBindingUtil.inflate(
             LayoutInflater.from(parent.context),
-            R.layout.row_item_movie_layout, parent, false)
-         return ViewHolderInstalledApp(bindingComponent)
+            R.layout.row_item_movie_layout, parent, false
+        )
+        return ViewHolderInstalledApp(bindingComponent)
     }
 
     override fun onBindViewHolder(holder: BaseViewHolder<*>, position: Int) {
@@ -43,11 +46,12 @@ class MovieListAdapter (val context: Context?): RecyclerView.Adapter<MovieListAd
         holder.bind(movieList)
 
     }
+
     inner class ViewHolderInstalledApp(var binding: RowItemMovieLayoutBinding) :
         BaseViewHolder<Result>(binding.root) {
         override fun bind(item: Result) {
             binding.clMainLayout.setOnClickListener {
-                onMovieItemClick.onMovieItemClick(item.id,item.poster_path,adapterPosition)
+                onMovieItemClick.onMovieItemClick(item.id, item.poster_path, adapterPosition)
             }
             val options = RequestOptions()
                 .fitCenter()
@@ -66,10 +70,10 @@ class MovieListAdapter (val context: Context?): RecyclerView.Adapter<MovieListAd
     }
 
     override fun getItemCount(): Int {
-        return  movieList.size
+        return movieList.size
     }
 
-    interface OnMovieItemClick{
-        fun onMovieItemClick(movieId:Int,posterPath:String?,position: Int)
+    interface OnMovieItemClick {
+        fun onMovieItemClick(movieId: Int, posterPath: String?, position: Int)
     }
 }

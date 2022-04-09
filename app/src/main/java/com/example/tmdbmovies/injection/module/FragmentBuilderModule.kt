@@ -8,8 +8,8 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class FragmentBuilderModule {
     @ContributesAndroidInjector
-    internal abstract fun contributeMovieListFragment():MovieListFragment
+    internal abstract fun contributeMovieListFragment(): MovieListFragment
 
     @ContributesAndroidInjector
-    internal abstract fun contributeMovieDetailFragment():MovieDetailFragment
+    internal abstract fun contributeMovieDetailFragment(): MovieDetailFragment
 }

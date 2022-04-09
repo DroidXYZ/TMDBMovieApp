@@ -8,5 +8,5 @@ import dagger.android.ContributesAndroidInjector
 abstract class ActivityBuilderModule {
 
     @ContributesAndroidInjector
-    internal abstract fun contributeMoviesActivity():MoviesActivity
+    internal abstract fun contributeMoviesActivity(): MoviesActivity
 }

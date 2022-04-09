@@ -23,10 +23,10 @@ interface TMDBNetworkService {
      */
     @GET("3/movie/popular")
     suspend fun getMovieList(
-        @Query("api_key") api_key:String,
-        @Query("language") language:String,
-        @Query("page") page:Int
-    ):Response<MovieResponse>
+        @Query("api_key") api_key: String,
+        @Query("language") language: String,
+        @Query("page") page: Int
+    ): Response<MovieResponse>
 
     /**
      * [Get Movie Popular Detail](https://developers.themoviedb.org/3/movies/get-movie-details)
@@ -39,13 +39,12 @@ interface TMDBNetworkService {
      *
      *  @return [MovieDetailResponse] response
      */
-     @GET("3/movie/{movie_id}")
-     suspend fun getMovieDetail(
-         @Path("movie_id") movie_id:Int,
-         @Query("api_key") api_key:String,
-         @Query("language") language:String
-     ):Response<MovieDetailResponse>
-
+    @GET("3/movie/{movie_id}")
+    suspend fun getMovieDetail(
+        @Path("movie_id") movie_id: Int,
+        @Query("api_key") api_key: String,
+        @Query("language") language: String
+    ): Response<MovieDetailResponse>
 
 
     /**
@@ -59,6 +58,6 @@ interface TMDBNetworkService {
      */
     @GET("3/configuration")
     suspend fun getImageConfiguration(
-        @Query("api_key") api_key:String
-    ):Response<ConfigurationResponse>
+        @Query("api_key") api_key: String
+    ): Response<ConfigurationResponse>
 }

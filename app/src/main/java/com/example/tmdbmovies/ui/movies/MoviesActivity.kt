@@ -10,7 +10,6 @@ import dagger.android.support.DaggerAppCompatActivity
 class MoviesActivity : BaseActivity() {
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.movie_activity_layout)
@@ -21,6 +20,7 @@ class MoviesActivity : BaseActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {

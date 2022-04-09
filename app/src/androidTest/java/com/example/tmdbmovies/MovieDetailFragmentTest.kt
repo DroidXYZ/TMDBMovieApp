@@ -70,16 +70,16 @@ class MovieDetailFragmentTest {
     }
 
     @Test
-    fun assert_Movie_Detail_Fragment_Render_The_UI_According_The_Empty_Movie_List_State() {
+    fun assert_Movie_Detail_Fragment_Render_The_UI_According_The_Empty_Movie_Detail_State() {
         scenario.onFragment(){ fragment->
-            val movieResponse = mock(MovieDetailResponse::class.java)
+            val movieResponse = MockMovieDetailResponse.getMovieDetailModel()
             fragment.updateUI(movieResponse)
         }
         onView(withId(R.id.clMainLayout)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
     }
 
     @Test
-    fun assert_Movie_Detail_Fragment_Render_The_UI_According_The_Error_Movie_List_State() {
+    fun assert_Movie_Detail_Fragment_Render_The_UI_According_The_Error_Movie_Detail_State() {
         scenario.onFragment(){ fragment->
             fragment.showEmptyState(true,"error message")
         }
@@ -87,10 +87,4 @@ class MovieDetailFragmentTest {
         onView(withId(R.id.tvEmptyView)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
     }
 
-    @Test
-    fun assert_Movie_Detail_Fragment_Render_The_UI_According_The_Movie_List_State() {
-        scenario.onFragment(){
-        }
-        onView(withId(R.id.clMainLayout)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
-    }
 }

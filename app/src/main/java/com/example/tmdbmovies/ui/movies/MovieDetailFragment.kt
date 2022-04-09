@@ -99,6 +99,7 @@ class MovieDetailFragment : BaseFragment() {
     }
 
      fun updateUI(movieDetailResponse: MovieDetailResponse) {
+        bindingComponent.clMainLayout.visibility = View.VISIBLE
         bindingComponent.tvMovieTitle.text = movieDetailResponse.original_title
         bindingComponent.tvMovieDetail.text = movieDetailResponse.overview
         bindingComponent.tvMoviePopularity.text =

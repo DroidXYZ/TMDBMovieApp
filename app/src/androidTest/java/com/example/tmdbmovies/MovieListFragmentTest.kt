@@ -1,25 +1,33 @@
 package com.example.tmdbmovies
 
+import android.view.View
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.Lifecycle
+import androidx.test.espresso.Espresso
 import androidx.test.espresso.Espresso.onView
+import androidx.test.espresso.assertion.ViewAssertions
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.matcher.RootMatchers
 import androidx.test.espresso.matcher.ViewMatchers
 import androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility
 import androidx.test.espresso.matcher.ViewMatchers.withId
+import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.tmdbmovies.models.movielist.Result
 import com.example.tmdbmovies.ui.movies.MovieListFragment
+import com.example.tmdbmovies.ui.movies.MoviesActivity
 import com.example.tmdbmovies.ui.movies.MoviesViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import org.hamcrest.Matchers
 
 import org.junit.Test
 import org.junit.runner.RunWith
 
 import org.junit.Assert.*
 import org.junit.Before
+import org.junit.Rule
 import org.junit.runners.model.TestClass
 
 /**
@@ -30,6 +38,9 @@ import org.junit.runners.model.TestClass
 @RunWith(AndroidJUnit4::class)
 @ExperimentalCoroutinesApi
 class MovieListFragmentTest {
+
+    @get:Rule
+    var activityRule = ActivityScenarioRule(MoviesActivity::class.java)
 
     private lateinit var scenario: FragmentScenario<MovieListFragment>
 
@@ -81,4 +92,24 @@ class MovieListFragmentTest {
         }
         onView(withId(R.id.rvMovieList)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
     }
+
+    @Test
+    @Throws(InterruptedException::class)
+    fun testVisibilityRecyclerView() {
+        Thread.sleep(1000)
+        var decorView : View?=null
+        activityRule.scenario.onActivity {
+           decorView= it.window.decorView
+        }
+        onView(withId(R.id.rvMovieList))
+            .inRoot(
+                RootMatchers.withDecorView(
+                    Matchers.`is`(
+                        decorView
+                    )
+                )
+            )
+            .check(matches(ViewMatchers.isDisplayed()))
+    }
+
 }

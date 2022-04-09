@@ -50,7 +50,7 @@ class MovieListAdapter(val context: Context?) :
     inner class ViewHolderInstalledApp(var binding: RowItemMovieLayoutBinding) :
         BaseViewHolder<Result>(binding.root) {
         override fun bind(item: Result) {
-            binding.clMainLayout.setOnClickListener {
+            binding.clRowMainLayout.setOnClickListener {
                 onMovieItemClick.onMovieItemClick(item.id, item.poster_path, adapterPosition)
             }
             val options = RequestOptions()

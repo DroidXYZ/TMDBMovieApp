@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/clMainLayout"
+        android:id="@+id/clRowMainLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp">

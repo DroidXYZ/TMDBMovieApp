@@ -8,7 +8,7 @@ import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
 import javax.inject.Singleton
-
+// Component class hold the all the modules injection will use in App
 @Singleton
 @Component(
     modules = [AndroidSupportInjectionModule::class,

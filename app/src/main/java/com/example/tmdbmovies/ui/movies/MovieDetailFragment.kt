@@ -23,7 +23,6 @@ import javax.inject.Inject
 
 class MovieDetailFragment : BaseFragment() {
 
-    private lateinit var movieListActivity: MoviesActivity
     private var imagePath: String = ""
     private var movieID: Int = 0
     private lateinit var bindingComponent: MovieDetailFragmentLayoutBinding

@@ -11,6 +11,7 @@ import android.net.NetworkCapabilities
 import android.net.NetworkInfo
 import android.os.Build
 
+//InternetUtil class to check and register/unregister internet connectivity change events
 object InternetUtil : LiveData<Boolean>() {
 
     private var broadcastReceiver: BroadcastReceiver? = null

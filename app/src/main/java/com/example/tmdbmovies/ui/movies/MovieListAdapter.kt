@@ -1,5 +1,6 @@
 package com.example.tmdbmovies.ui.movies
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,7 @@ class MovieListAdapter(val context: Context?) :
 
     private var movieList: ArrayList<Result> = arrayListOf()
     private lateinit var onMovieItemClick: OnMovieItemClick
+    @SuppressLint("NotifyDataSetChanged")
     fun setMovieList(movieList: ArrayList<Result>) {
         this.movieList = movieList
         notifyDataSetChanged()
@@ -47,7 +49,7 @@ class MovieListAdapter(val context: Context?) :
 
     }
 
-    inner class ViewHolderInstalledApp(var binding: RowItemMovieLayoutBinding) :
+    inner class ViewHolderInstalledApp(private var binding: RowItemMovieLayoutBinding) :
         BaseViewHolder<Result>(binding.root) {
         override fun bind(item: Result) {
             binding.clRowMainLayout.setOnClickListener {

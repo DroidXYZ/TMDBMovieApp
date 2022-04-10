@@ -45,6 +45,7 @@ class MovieViewModelTest {
     @Before
     fun setup() {
     }
+
     @Test
     fun givenMovieDetailResponse_WhenFetchMovieDetail_ShouldUpdateLiveData() =
         mainCoroutineRule.runBlockingTest {
@@ -129,9 +130,6 @@ class MovieViewModelTest {
             verify(apiErrorObserver).onChanged(RuntimeException(errorMessage).localizedMessage)
             viewModel.errorMessage.removeObserver(apiErrorObserver)
         }
-
-
-
 
 
 }

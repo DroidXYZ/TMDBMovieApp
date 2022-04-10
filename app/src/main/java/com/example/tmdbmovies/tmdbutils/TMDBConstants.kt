@@ -1,6 +1,5 @@
 package com.example.tmdbmovies.tmdbutils
 
-import com.example.tmdbmovies.BuildConfig
 
 open class TMDBConstants {
     companion object {

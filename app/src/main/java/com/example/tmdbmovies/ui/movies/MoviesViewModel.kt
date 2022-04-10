@@ -21,7 +21,7 @@ class MoviesViewModel @Inject constructor(private val repository: MovieRepositor
     val movieDetail = MutableLiveData<MovieDetailResponse>()
     private var job: Job? = null
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
-        errorMessage.postValue("${throwable.localizedMessage}")
+        errorMessage.postValue(throwable.localizedMessage)
         loading.postValue(false)
     }
     val loading = MutableLiveData<Boolean>()

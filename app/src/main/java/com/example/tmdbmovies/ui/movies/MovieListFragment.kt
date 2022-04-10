@@ -1,14 +1,12 @@
 package com.example.tmdbmovies.ui.movies
 
-import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.example.tmdbmovies.BuildConfig.API_KEY
 import com.example.tmdbmovies.R
@@ -22,7 +20,6 @@ import javax.inject.Inject
 
 class MovieListFragment : BaseFragment(), MovieListAdapter.OnMovieItemClick {
 
-//    private lateinit var movieListActivity: MoviesActivity
     private lateinit var bindingComponent: MovieFragmentLayoutBinding
 
     private lateinit var movieListAdapter: MovieListAdapter
@@ -54,9 +51,10 @@ class MovieListFragment : BaseFragment(), MovieListAdapter.OnMovieItemClick {
         subscribeToViewModel()
 
     }
-    private fun initView(){
+
+    private fun initView() {
         bindingComponent.rvMovieList.layoutManager =
-            androidx.recyclerview.widget.LinearLayoutManager(context) as androidx.recyclerview.widget.RecyclerView.LayoutManager?
+            androidx.recyclerview.widget.LinearLayoutManager(context)
         val dividerItemDecoration = DividerItemDecoration(
             bindingComponent.rvMovieList.context,
             1
@@ -74,17 +72,16 @@ class MovieListFragment : BaseFragment(), MovieListAdapter.OnMovieItemClick {
             isShowEmptyState = true,
             getString(R.string.please_check_your_internet_connection_and_try_again)
         )
-        activity?.let {
-            InternetUtil.observe(it, Observer { status ->
-                if (status) {
-                    showEmptyState(isShowEmptyState = false, "")
-                    viewModel.getMoviesAndConfiguration(API_KEY, TMDBConstants.APP_LANGUAGE, 1)
-                }
-            })
+        InternetUtil.observe(viewLifecycleOwner) { status ->
+            if (status) {
+                showEmptyState(isShowEmptyState = false, "")
+                viewModel.getMoviesAndConfiguration(API_KEY, TMDBConstants.APP_LANGUAGE, 1)
+            }
         }
+
     }
 
-     fun showEmptyState(isShowEmptyState: Boolean, errorMsg: String) {
+    fun showEmptyState(isShowEmptyState: Boolean, errorMsg: String) {
         if (isShowEmptyState) {
             bindingComponent.tvEmptyView.visibility = View.VISIBLE
             bindingComponent.tvEmptyView.text = errorMsg
@@ -108,12 +105,12 @@ class MovieListFragment : BaseFragment(), MovieListAdapter.OnMovieItemClick {
         }
     }
 
-    fun renderMovieListUI(result: ArrayList<Result>){
+    fun renderMovieListUI(result: ArrayList<Result>) {
         movieListAdapter.setMovieList(result)
         bindingComponent.rvMovieList.scrollToPosition(lastSelectedPos)
     }
 
-     fun showLoadingIndicator(isVisible: Boolean) {
+    fun showLoadingIndicator(isVisible: Boolean) {
         if (!isVisible)
             bindingComponent.progressBar.visibility = View.GONE
         else
@@ -125,13 +122,11 @@ class MovieListFragment : BaseFragment(), MovieListAdapter.OnMovieItemClick {
         bundle.putInt(TMDBConstants.EXTRA_MOVIE_ID, movieId)
         lastSelectedPos = position
         posterPath?.let {
-            bundle.putString(TMDBConstants.EXTRA_MOVIE_IMAGE_PATH, "$it")
+            bundle.putString(TMDBConstants.EXTRA_MOVIE_IMAGE_PATH, it)
         }
-        val navController =
-            activity?.let { Navigation.findNavController(it, R.id.movie_main_nav_host_fragment) }
-        if (navController?.currentDestination?.id == R.id.MovieListFragment) {
-            navController.navigate(R.id.action_list_to_detail, bundle)
-        }
+        val navController = view?.findNavController()
+        navController?.navigate(R.id.action_list_to_detail, bundle)
+
     }
 
 

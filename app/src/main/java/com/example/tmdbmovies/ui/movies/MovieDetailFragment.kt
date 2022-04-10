@@ -1,16 +1,12 @@
 package com.example.tmdbmovies.ui.movies
 
-import android.content.Context
+import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.ProgressBar
-import android.widget.TextView
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.Priority
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -19,7 +15,6 @@ import com.example.tmdbmovies.BuildConfig
 import com.example.tmdbmovies.R
 import com.example.tmdbmovies.base.BaseFragment
 import com.example.tmdbmovies.databinding.MovieDetailFragmentLayoutBinding
-import com.example.tmdbmovies.databinding.RowItemMovieLayoutBinding
 import com.example.tmdbmovies.extensions.showToast
 import com.example.tmdbmovies.models.moviedetail.MovieDetailResponse
 import com.example.tmdbmovies.tmdbutils.InternetUtil
@@ -59,22 +54,21 @@ class MovieDetailFragment : BaseFragment() {
         subscribeToViewModel()
     }
 
-    private fun checkNetworkConnection() = if (InternetUtil.isInternetOn()) {
-        viewModel.getMoviesDetail(movieID, BuildConfig.API_KEY, TMDBConstants.APP_LANGUAGE)
-    } else {
+    private fun checkNetworkConnection() = if (InternetUtil.isInternetOn())
+        viewModel.getMoviesDetail(movieID, BuildConfig.API_KEY, TMDBConstants.APP_LANGUAGE) else {
         showEmptyState(
             isShowEmptyState = true,
             getString(R.string.please_check_your_internet_connection_and_try_again)
         )
-        InternetUtil.observe(movieListActivity, Observer { status ->
+        InternetUtil.observe(viewLifecycleOwner) { status ->
             if (status) {
                 showEmptyState(isShowEmptyState = false, "")
                 viewModel.getMoviesDetail(movieID, BuildConfig.API_KEY, TMDBConstants.APP_LANGUAGE)
             }
-        })
+        }
     }
 
-     fun showEmptyState(isShowEmptyState: Boolean, errorMsg: String) {
+    fun showEmptyState(isShowEmptyState: Boolean, errorMsg: String) {
         if (isShowEmptyState) {
             bindingComponent.tvEmptyView.visibility = View.VISIBLE
             bindingComponent.tvEmptyView.text = errorMsg
@@ -98,7 +92,8 @@ class MovieDetailFragment : BaseFragment() {
         }
     }
 
-     fun updateUI(movieDetailResponse: MovieDetailResponse) {
+    @SuppressLint("SetTextI18n")
+    fun updateUI(movieDetailResponse: MovieDetailResponse) {
         bindingComponent.clMainLayout.visibility = View.VISIBLE
         bindingComponent.tvMovieTitle.text = movieDetailResponse.original_title
         bindingComponent.tvMovieDetail.text = movieDetailResponse.overview
@@ -120,7 +115,7 @@ class MovieDetailFragment : BaseFragment() {
         }
     }
 
-     fun showLoadingIndicator(isVisible: Boolean) {
+    fun showLoadingIndicator(isVisible: Boolean) {
         if (!isVisible)
             bindingComponent.progressBar.visibility = View.GONE
         else

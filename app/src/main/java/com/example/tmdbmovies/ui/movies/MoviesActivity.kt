@@ -5,7 +5,6 @@ import android.view.MenuItem
 import androidx.navigation.Navigation
 import com.example.tmdbmovies.R
 import com.example.tmdbmovies.base.BaseActivity
-import dagger.android.support.DaggerAppCompatActivity
 
 class MoviesActivity : BaseActivity() {
 

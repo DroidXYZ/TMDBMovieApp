@@ -23,10 +23,5 @@ class InternetUtilUnitTest {
     fun check_InternetON() {
         assertTrue(InternetUtil.isInternetOn())
     }
-    @Test
-    fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.example.tmdbmovies", appContext.packageName)
-    }
+
 }
